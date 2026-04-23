@@ -14,7 +14,7 @@ const client = new Client({
 
 const TOKEN = process.env.DISCORD_TOKEN;
 const GUILD_ID = process.env.GUILD_ID || "1459821173146910854";
-const CHANNEL_ID = process.env.CHANNEL_ID || "1459821173859680432";
+const CHANNEL_ID = process.env.CHANNEL_ID || "1490352937594126357";
 const TARGET_BOT_ID = "1047234279802949703";
 
 let loops = { macaron: null, alba: null, dig: null };
