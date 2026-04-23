@@ -8,6 +8,9 @@
   },
   "dependencies": {
     "discord.js-selfbot-v13": "^2.15.1",
-    "dotenv": "^16.4.7"
+    "dotenv": "^16.0.0"
+  },
+  "engines": {
+    "node": "20.x"
   }
 }
