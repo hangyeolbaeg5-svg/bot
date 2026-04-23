@@ -1,7 +1,6 @@
 require("dotenv").config();
 const { Client } = require("discord.js-selfbot-v13");
-
-// 셀프봇은 별도의 intents 설정 없이 생성하는 것이 가장 안전합니다.
+// 셀프봇은 Client 안에 아무것도 넣지 않는 것이 가장 깔끔합니다.
 const client = new Client({ checkUpdate: false });
 
 const TOKEN = process.env.DISCORD_TOKEN;
@@ -15,7 +14,7 @@ async function sendCmd(cmd) {
     try {
         const guild = client.guilds.cache.get(GUILD_ID);
         const channel = guild?.channels.cache.get(CHANNEL_ID);
-        if (!channel) return console.log("채널을 찾을 수 없음");
+        if (!channel) return console.log("채널을 찾지 못함 (ID 확인 필요)");
         
         await channel.sendSlash(TARGET_BOT_ID, cmd);
         console.log(`[작동] /${cmd}`);
@@ -32,6 +31,7 @@ function startLoop(name, base, variance, cmd) {
 }
 
 client.on("messageCreate", async (msg) => {
+    // 본인 계정 메시지이고 지정된 채널일 때만 작동
     if (msg.author.id !== client.user.id || msg.channel.id !== CHANNEL_ID) return;
     
     const c = msg.content.trim();
@@ -40,12 +40,17 @@ client.on("messageCreate", async (msg) => {
     if (c === "!땅파기") { loops.dig = true; startLoop("dig", 5, 1, "땅파기"); console.log("땅파기 시작"); }
     if (c === "!중지") { 
         Object.keys(loops).forEach(k => { clearTimeout(loops[k]); loops[k] = null; }); 
-        console.log("모두 중지");
+        console.log("모든 매크로 중지");
     }
 });
 
 client.once("ready", () => {
-    console.log(`성공: ${client.user.tag} 계정 연결됨`);
+    console.log(`READY: ${client.user.tag} 계정으로 로그인 성공!`);
 });
 
-client.login(TOKEN).catch(err => console.error("로그인 실패:", err.message));
+// 로그인 실행
+if (TOKEN) {
+    client.login(TOKEN).catch(err => console.error("로그인 실패:", err.message));
+} else {
+    console.error("DISCORD_TOKEN 변수가 없습니다!");
+}
