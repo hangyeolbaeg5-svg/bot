@@ -1,6 +1,16 @@
 require("dotenv").config();
 const { Client } = require("discord.js-selfbot-v13");
-const client = new Client({ checkUpdate: false });
+
+// 인텐트를 명시적으로 설정합니다.
+const client = new Client({ 
+    checkUpdate: false,
+    intents: [
+        "GUILDS",
+        "GUILD_MESSAGES",
+        "MESSAGE_CONTENT", // 메시지 읽기 권한
+        "GUILD_PRESENCES"  // 상태 확인 권한
+    ]
+});
 
 const TOKEN = process.env.DISCORD_TOKEN;
 const GUILD_ID = process.env.GUILD_ID || "1459821173146910854";
@@ -16,8 +26,8 @@ function randomDelay(base, variance) {
 async function sendCmd(cmd) {
     try {
         const guild = client.guilds.cache.get(GUILD_ID);
-        const channel = guild.channels.cache.get(CHANNEL_ID);
-        if (!channel) return console.error("Channel not found");
+        const channel = guild?.channels.cache.get(CHANNEL_ID);
+        if (!channel) return console.error("[Error] Channel not found");
 
         await channel.sendSlash(TARGET_BOT_ID, cmd);
         console.log(`[Sent] /${cmd}`);
@@ -27,7 +37,7 @@ async function sendCmd(cmd) {
 }
 
 async function startLoop(name, base, variance, cmd) {
-    if (!loops[name]) return;
+    if (loops[name] === null) return;
     await sendCmd(cmd);
     loops[name] = setTimeout(() => startLoop(name, base, variance, cmd), randomDelay(base, variance));
 }
@@ -39,7 +49,7 @@ function toggle(name, base, variance, cmd) {
         console.log(`[OFF] ${cmd}`);
     } else {
         console.log(`[ON] ${cmd}`);
-        loops[name] = true; 
+        loops[name] = true;
         startLoop(name, base, variance, cmd);
     }
 }
@@ -60,4 +70,9 @@ client.on("messageCreate", async (msg) => {
 });
 
 client.once("ready", () => console.log(`Logged in as: ${client.user.tag}`));
-client.login(TOKEN);
+
+if (TOKEN) {
+    client.login(TOKEN).catch(err => console.error("Login Failed:", err.message));
+} else {
+    console.error("DISCORD_TOKEN is missing in Railway Variables.");
+}
