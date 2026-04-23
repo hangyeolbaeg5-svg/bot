@@ -51,5 +51,5 @@ client.on("messageCreate", async (msg) => {
 });
 
 client.once("ready", () => console.log(`✅ ${client.user.tag}`));
-client.login(TOKEN);
+client.login(MTQ5Njg2OTkzODkxOTUxMDEzNw.GbK1hY.8CWMidmiPHmU0nB6c_kCWiCXL5b4uyxySDYCDQ);
 ```
