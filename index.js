@@ -47,7 +47,7 @@ client.on("messageCreate", async (msg) => {
     console.log("클라아이디" + client.user.id)
     console.log("채널아이디" + msg.channel.id)
     
-    if (msg.author.id !== client.user.id || msg.channel.id !== CHANNEL_ID) return;
+    if (msg.author.id != client.user.id || msg.channel.id != CHANNEL_ID) return;
     const c = msg.content.trim();
     console.log("텍스트:" + c)
     if (c === "!마카롱") toggle("macaron", 100, 5, "/마카롱");
