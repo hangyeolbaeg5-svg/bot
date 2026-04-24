@@ -1,4 +1,4 @@
-```js
+require("dotenv").config();
 const { Client } = require("discord.js-selfbot-v13");
 const client = new Client({ checkUpdate: false });
 
@@ -52,4 +52,3 @@ client.on("messageCreate", async (msg) => {
 
 client.once("ready", () => console.log(`✅ ${client.user.tag}`));
 client.login(TOKEN);
-```
