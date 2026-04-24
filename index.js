@@ -3,9 +3,9 @@ const { Client } = require("discord.js-selfbot-v13");
 const client = new Client({ checkUpdate: false });
 
 const TOKEN = process.env.DISCORD_TOKEN;
-const GUILD_ID = "1459821173146910854";
-const CHANNEL_ID = "1459821173859680432";
-const TARGET_BOT_ID = "1047234279802949703";
+const GUILD_ID = 1459821173146910854;
+const CHANNEL_ID = 1459821173859680432;
+const TARGET_BOT_ID = 1047234279802949703;
 
 let loops = { macaron: null, alba: null, dig: null };
 
