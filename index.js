@@ -2,9 +2,9 @@ require("dotenv").config();
 const { Client } = require("discord.js-selfbot-v13");
 const client = new Client({ checkUpdate: false });
 
-// ⚠️ 에러 발생 시 프로세스가 꺼지는 것을 방지
-process.on('unhandledRejection', (reason, promise) => {});
-process.on('uncaughtException', (err, origin) => {});
+// 프로그램 꺼짐 방지
+process.on('unhandledRejection', () => {});
+process.on('uncaughtException', () => {});
 
 const TOKEN = process.env.DISCORD_TOKEN;
 const GUILD_ID = "1459821173146910854";
@@ -17,12 +17,11 @@ async function sendCmd(cmd) {
     try {
         const guild = client.guilds.cache.get(GUILD_ID);
         const channel = guild?.channels.cache.get(CHANNEL_ID);
-        if (!channel) return console.log("채널 찾기 실패");
-        
+        if (!channel) return;
         await channel.sendSlash(TARGET_BOT_ID, cmd);
-        console.log("명령어 전송 성공: /" + cmd);
+        console.log("Sent: /" + cmd);
     } catch (e) {
-        console.error("명령어 전송 실패: " + e.message);
+        console.log("Fail: /" + cmd);
     }
 }
 
@@ -35,25 +34,19 @@ function startLoop(name, base, variance, cmd) {
 
 client.on("messageCreate", async (msg) => {
     if (msg.author.id !== client.user.id || msg.channel.id !== CHANNEL_ID) return;
-    
     const c = msg.content.trim();
-    if (c === "!마카롱") { loops.macaron = true; startLoop("macaron", 100, 5, "마카롱"); console.log("마카롱 시작"); }
-    if (c === "!알바") { loops.alba = true; startLoop("alba", 30, 3, "알바"); console.log("알바 시작"); }
-    if (c === "!땅파기") { loops.dig = true; startLoop("dig", 5, 1, "땅파기"); console.log("땅파기 시작"); }
+    if (c === "!마카롱") { loops.macaron = true; startLoop("macaron", 100, 5, "마카롱"); console.log("Macaron ON"); }
+    if (c === "!알바") { loops.alba = true; startLoop("alba", 30, 3, "알바"); console.log("Alba ON"); }
+    if (c === "!땅파기") { loops.dig = true; startLoop("dig", 5, 1, "땅파기"); console.log("Dig ON"); }
     if (c === "!중지") {
         Object.keys(loops).forEach(k => { clearTimeout(loops[k]); loops[k] = null; });
-        console.log("모든 매크로 중지");
+        console.log("All Stop");
     }
 });
 
 client.once("ready", () => {
-    console.log("===============================");
-    console.log("로그인 성공: " + client.user.tag);
-    console.log("봇이 준비되었습니다!");
-    console.log("===============================");
+    console.log("Logged in: " + client.user.tag);
 });
 
-console.log("디스코드 연결 시도 중...");
-client.login(TOKEN).catch(err => {
-    console.error("로그인 실패: " + err.message);
-});
+console.log("Connecting...");
+client.login(TOKEN).catch(() => console.log("Login Error"));
