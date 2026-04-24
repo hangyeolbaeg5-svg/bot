@@ -7,6 +7,8 @@ const GUILD_ID = "1459821173146910854";
 const CHANNEL_ID = "1459821173859680432";
 const TARGET_BOT_ID = "1047234279802949703";
 
+console.log(TOKEN)
+
 let loops = { macaron: null, alba: null, dig: null };
 
 function randomDelay(base, variance) {
